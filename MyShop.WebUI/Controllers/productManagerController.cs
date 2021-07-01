@@ -88,15 +88,58 @@ namespace MyShop.WebUI.Controllers
             {
                 if (!ModelState.IsValid)
                 {
-                    return View(product)
+                    return View(product);
                 }
 
                 productToEdit.Category = product.Category;
                 productToEdit.Description = product.Description;
+                productToEdit.Image = product.Image;
+                productToEdit.Price = product.Price;
+
+                context.Commit(); // commit changes
+
+                return RedirectToAction("Index");
                
             }
 
         }          
+
+
+        public ActionResult Delete(string Id)
+        {
+            Product productToDelete = context.Find(Id);
+
+            if (productToDelete == null )
+            {
+                return HttpNotFound();
+            }
+
+            else
+            {
+                return View(productToDelete);
+            }
+
+
+        }
+
+        [HttpPost]
+        [ActionName("Delete")]
+        public ActionResult ConfirmDelete(string Id)
+        {
+            Product productToDelete = context.Find(Id);
+
+            if (productToDelete == null)
+            {
+                return HttpNotFound();
+            }
+            else
+            {
+                context.Delete(Id);
+                context.Commit();
+                return RedirectToAction("Index");
+            }
+
+        }
            
     }
 }
