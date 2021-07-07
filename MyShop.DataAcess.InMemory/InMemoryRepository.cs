@@ -1,4 +1,5 @@
-﻿using MyShop.Core.Models;
+﻿using MyShop.Core.Contracts;
+using MyShop.Core.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace MyShop.DataAcess.InMemory
 {
-  public  class InMemoryRepository<T> where T: BaseEntity  //becaue BaseEntity has Id, so whenever refer to iD he generic class knows what that is
+    public class InMemoryRepository<T> : IRepository<T>  where T : BaseEntity  //becaue BaseEntity has Id, so whenever refer to iD he generic class knows what that is
     {
         ObjectCache cache = MemoryCache.Default;
         List<T> items;
@@ -34,6 +35,7 @@ namespace MyShop.DataAcess.InMemory
             cache[className] = items;
         }
 
+       
         public void Insert(T t)
         {
             items.Add(t);
@@ -56,9 +58,9 @@ namespace MyShop.DataAcess.InMemory
             }
         }
 
-        public T Find(T t)
+        public T Find(string Id)
         {
-            T t = items.Find(i => i.Id == t.Id);
+            T t = items.Find(i => i.Id == Id);
 
             if (t != null)
             {
@@ -93,10 +95,10 @@ namespace MyShop.DataAcess.InMemory
 
         }
 
-
+     
     } // end of class
 
 
-       
-    } // end of namespace
+
+} // end of namespace
 
